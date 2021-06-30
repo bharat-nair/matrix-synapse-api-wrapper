@@ -65,6 +65,10 @@ class User(Helper):
         return response
 
     def get_room_memberships(self, user_id):
+        '''
+            List all the rooms a user is in currently.
+                user_id: required, Provide user ID as '@username:domain.tld'\n
+        '''
         req = Request(urljoin(self.homeserver_url, "/_synapse/admin/v1/users/{}/joined_rooms".format(user_id)),
                       headers={"Authorization": "Bearer {}".format(self.access_token)})
         response = {}
