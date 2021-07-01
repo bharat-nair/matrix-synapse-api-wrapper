@@ -199,3 +199,19 @@ class User(Helper):
             if e.code == 401:
                 raise UnauthorizedError
         return response
+
+    def login_as(self,user_id: str, valid_until: int = 0):
+        '''
+            Get an access token that lets you login as another user.
+                user_id: required, Provide user ID as '@username:domain.tld'\n
+                valid_until: optional, if specified, the access token will expire after a certain time (ms)
+        '''
+        req = Request(urljoin(self.homeserver_url, "/_synapse/admin/v1/users/{}/login".format(user_id)),
+                      headers={"Authorization": "Bearer {}".format(self.access_token)})
+        response = {}
+        try:
+            response = json.loads(urlopen(req).read().decode())
+        except HTTPError as e:
+            if e.code == 401:
+                raise UnauthorizedError
+        return response
